@@ -99,26 +99,23 @@ class Transaction(models.Model):
         """
         return f'{self.sender.user.username} sent {self.amount} to {self.receiver.user.username}'
 
+    def transfer(self, amount):
+        """
+        Transfers the specified amount from the sender's account to the receiver's account.
+
+        :param amount: The amount to transfer from the sender's account to the receiver's account
+        :type amount: Decimal
+
+        :return: None
+        """
+        self.sender.balance -= amount
+        self.receiver.balance += amount
+        self.sender.save()
+        self.receiver.save()
+        return None
+
 
 class Request(models.Model):
-    """
-    Request model for storing request information.
-
-    Attributes:
-    - sender: ForeignKey to Account model for the sender account
-    - receiver: ForeignKey to Account model for the receiver account
-    - amount: DecimalField to store request amount
-    - created_at: DateTimeField to store request creation date
-
-    Methods:
-    - __str__: Returns the request type and amount
-    - accept_request: Accepts a request and transfers the requested amount from the receiver's account to the
-     sender's account
-    - decline_request: Declines a request and deletes the request from the database
-
-
-    """
-
     class Meta:
         db_table = 'request'
         verbose_name = 'Request'
@@ -128,8 +125,15 @@ class Request(models.Model):
                                related_name='sent_requests')
     receiver = models.ForeignKey(Account, on_delete=models.CASCADE,
                                  related_name='received_requests')
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    amount = models.DecimalField(max_digits=10, decimal_places=2,
+                                 default=0.00)
     created_at = models.DateTimeField(auto_now_add=True)
+    REQUEST_STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('declined', 'Declined'),
+    )
+    status = models.CharField(max_length=10, choices=REQUEST_STATUS_CHOICES, default='pending')
 
     def __str__(self):
         """
@@ -139,24 +143,35 @@ class Request(models.Model):
         """
         return f'{self.sender.user.username} requested {self.amount} from {self.receiver.user.username}'
 
-    def accept_request(self):
+    def accept_request(self, amount):
         """
-        Accepts a request and transfers the requested amount from the receiver's account to the sender's account.
+        Accepts a request, creates and executes a transaction and sets req. to accepted.
 
-        :return: The updated account balance of the sender's account after the transfer.
-        :rtype: Decimal
+        :param amount:
+
+        :return:
         """
-        self.sender.change_balance(self.amount)
-        self.receiver.change_balance(-self.amount)
-        self.delete()
-        return self.sender.balance
+
+        # Checks that the receiver has enough balance to accept the request
+        if self.receiver.balance >= amount:
+            # Creates a transaction
+            transaction = Transaction(sender=self.sender, receiver=self.receiver,
+                                      amount=amount)
+            transaction.save()
+            # Executes the transaction
+            transaction.transfer(amount)
+            self.status = 'accepted'
+            return self.sender.balance
+
+        else:
+            return None
 
     def decline_request(self):
         """
-        Declines a request and deletes the request from the database.
+        Declines a request and sets req.
 
         :return: None
         """
-        self.delete()
+        self.status = 'declined'
         return None
 
