@@ -62,3 +62,40 @@ class Account(models.Model):
         self.balance += amount
         self.save()
         return self.balance
+
+
+class Transaction(models.Model):
+    """
+    Transaction model for storing transaction information.
+
+    Attributes:
+    - sender: ForeignKey to Account model for the sender account
+    - receiver: ForeignKey to Account model for the receiver account
+    - amount: DecimalField to store transaction amount
+    - created_at: DateTimeField to store transaction creation date
+
+    Methods:
+    - __str__: Returns the transaction type and amount
+
+
+    """
+    class Meta:
+        db_table = 'transaction'
+        verbose_name = 'Transaction'
+        verbose_name_plural = 'Transactions'
+
+    sender = models.ForeignKey(Account, on_delete=models.CASCADE,
+                               related_name='sent_transactions')
+    receiver = models.ForeignKey(Account, on_delete=models.CASCADE,
+                                 related_name='received_transactions')
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """
+        Returns the transaction type and amount.
+
+        :return: str: The transaction type and amount
+        """
+        return f'{self.sender.user.username} sent {self.amount} to {self.receiver.user.username}'
+
