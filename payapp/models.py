@@ -131,6 +131,7 @@ class Request(models.Model):
     - accept_request: Accepts a request, creates and executes a transaction and sets req. to accepted
     - decline_request: Declines a request and sets req. to declined
     """
+
     class Meta:
         db_table = 'request'
         verbose_name = 'Request'
