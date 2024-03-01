@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class Account(models.Model):
     """
     Account model for storing user account information.
@@ -75,8 +76,7 @@ class Transaction(models.Model):
 
     Methods:
     - __str__: Returns the transaction type and amount
-
-
+    - transfer: Transfers the specified amount from the sender's account to the receiver's account
     """
     class Meta:
         db_table = 'transaction'
@@ -115,6 +115,22 @@ class Transaction(models.Model):
 
 
 class Request(models.Model):
+    """
+    Request model for storing request information.
+
+    Attributes:
+    - sender: ForeignKey to Account model for the sender account
+    - receiver: ForeignKey to Account model for the receiver account
+    - amount: DecimalField to store request amount
+    - created_at: DateTimeField to store request creation date
+    - REQUEST_STATUS_CHOICES: Tuple of tuples to store request status choices
+    - status: CharField to store request status
+
+    Methods:
+    - __str__: Returns the request type and amount
+    - accept_request: Accepts a request, creates and executes a transaction and sets req. to accepted
+    - decline_request: Declines a request and sets req. to declined
+    """
     class Meta:
         db_table = 'request'
         verbose_name = 'Request'
