@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-
 from register.forms import UserForm
 
 
@@ -36,5 +35,7 @@ def login_view(request):
     """
     View function to handle the login of a user
 
+
+    :param request:
     :return:
     """
