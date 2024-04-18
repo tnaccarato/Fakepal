@@ -9,6 +9,8 @@ from thrift_timestamp.server import ThriftServerSingleton as server
 
 
 class UserViewTests(TestCase):
+    server = server
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

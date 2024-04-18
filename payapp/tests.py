@@ -6,6 +6,8 @@ from payapp.models import Account, Request, Notification
 from thrift_timestamp.server import ThriftServerSingleton as server
 
 class PayAppViewTests(TestCase):
+    server = server
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

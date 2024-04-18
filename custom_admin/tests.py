@@ -10,6 +10,8 @@ from thrift_timestamp.server import ThriftServerSingleton as server
 
 class CustomAdminViewTests(TestCase):
     # Stops the Thrift server after all tests have run
+    server = server
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
