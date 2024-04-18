@@ -5,7 +5,7 @@ from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 from thrift.transport import TSocket
 from thrift.transport import TTransport
-
+import os
 from thrift_timestamp.gen_py.timestamp_service import TimestampService
 
 # Global variable to hold the Thrift server instance
@@ -55,7 +55,8 @@ def stop_thrift_server():
     global server_running
     server_running = False
 
-
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    start_thrift_server()
+    if os.getenv('RUN_THRIFT_SERVER', 'False') == 'True':
+        start_thrift_server()
+    else:
+        logging.info("Thrift server not started due to environment settings.")
