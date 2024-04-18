@@ -5,17 +5,20 @@ from django.urls import reverse
 from django.contrib.auth.models import User, Group
 from register.forms import UserForm, LoginForm
 from payapp.utils import convert_currency
-from thrift_timestamp import server
+from thrift_timestamp.server import ThriftServerSingleton as server
 
 
 class UserViewTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.server = server()
+        cls.server.start_server()
 
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
-        # Stop the Thrift server
-        server.stop_thrift_server()
-        print('Thrift server stopped.')
+        cls.server.stop_server()
 
     def setUp(self):
         self.client = Client()

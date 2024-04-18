@@ -5,17 +5,21 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from payapp.models import Account
 from register.forms import UserForm
-from thrift_timestamp import server
+from thrift_timestamp.server import ThriftServerSingleton as server
 
 
 class CustomAdminViewTests(TestCase):
     # Stops the Thrift server after all tests have run
     @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.server = server()
+        cls.server.start_server()
+
+    @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
-        # Stop the Thrift server
-        server.stop_thrift_server()
-        print("Thrift server stopped")
+        cls.server.stop_server()
 
     def setUp(self):
         self.client = Client()
