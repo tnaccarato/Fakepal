@@ -6,6 +6,14 @@ from thrift_timestamp.gen_py.timestamp_service import TimestampService
 
 class ThriftTimestampClient:
     """Thrift client to fetch the current timestamp from the Thrift server."""
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        """Implement the Singleton design pattern for the Thrift client."""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self, host='localhost', port=9090):
         """Initialize the Thrift client with the host and port of the Thrift server."""
         self.host = host
