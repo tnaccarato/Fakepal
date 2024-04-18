@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     '52.203.137.55',  # AWS
     '127.0.0.1',  # Localhost (IPv4)
     'localhost',  # Localhost
+    'ec2-52-203-137-55.compute-1.amazonaws.com' # Amazon web server
 ]
 
 # Application definition
