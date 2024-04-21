@@ -15,9 +15,13 @@ def convert_currency(currency1, currency2, amount_of_currency1):
     # If the currencies are the same, return the amount of currency1
     if currency1 == currency2:
         return amount_of_currency1
+    url = (f'https://ec2-52-203-137-55.compute-1.amazonaws.com/webapps2024/conversion/'
+           f'{currency1.upper()}/'
+           f'{currency2.upper()}/'
+           f'{amount_of_currency1}')
     try:
-        response = requests.get(f'https://ec2-52-203-137-55.compute-1.amazonaws.com/webapps2024/{currency1.upper()}/{currency2.upper()}/'
-                                f'{amount_of_currency1}')
+        response = requests.get(url, verify=False)
+        response.raise_for_status()  # Raises HTTPError for bad responses (400 or 500 level responses)
     except Exception:
         raise CurrencyConversionError('Error in currency conversion, please try again')
     # If the request is unsuccessful, raise an exception
