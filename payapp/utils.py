@@ -22,9 +22,10 @@ def convert_currency(currency1, currency2, amount_of_currency1):
            f'{amount_of_currency1}')
     try:
         print("Requesting URL: ", url)
-        response = requests.get(url, verify='/home/ubuntu/webapps2024/webapps.crt')
+        response = requests.get(url, verify=False)
         response.raise_for_status()  # Raises HTTPError for bad responses (400 or 500 level responses)
-    except requests.exceptions.HTTPError as e:
+    except Exception as e:
+        print(e)
         raise CurrencyConversionError('Error in currency conversion, please try again')
     # If the request is unsuccessful, raise an exception
     if response.status_code != 200:
