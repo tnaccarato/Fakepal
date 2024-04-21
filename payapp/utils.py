@@ -20,7 +20,7 @@ def convert_currency(currency1, currency2, amount_of_currency1):
            f'{currency2.upper()}/'
            f'{amount_of_currency1}')
     try:
-        response = requests.get(url, verify='/../webapps.crt')
+        response = requests.get(url, verify='/home/ubuntu/webapps2024/webapps.crt')
         response.raise_for_status()  # Raises HTTPError for bad responses (400 or 500 level responses)
     except Exception:
         raise CurrencyConversionError('Error in currency conversion, please try again')
