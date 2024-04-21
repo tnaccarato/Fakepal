@@ -12,6 +12,7 @@ def convert_currency(currency1, currency2, amount_of_currency1):
     :param amount_of_currency1:
     :return:
     """
+    print(f"Converting {currency1} to {currency2}")
     # If the currencies are the same, return the amount of currency1
     if currency1 == currency2:
         return amount_of_currency1
@@ -20,9 +21,10 @@ def convert_currency(currency1, currency2, amount_of_currency1):
            f'{currency2.upper()}/'
            f'{amount_of_currency1}')
     try:
+        print("Requesting URL: ", url)
         response = requests.get(url, verify='/home/ubuntu/webapps2024/webapps.crt')
         response.raise_for_status()  # Raises HTTPError for bad responses (400 or 500 level responses)
-    except Exception:
+    except requests.exceptions.HTTPError as e:
         raise CurrencyConversionError('Error in currency conversion, please try again')
     # If the request is unsuccessful, raise an exception
     if response.status_code != 200:
