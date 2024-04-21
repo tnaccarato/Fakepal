@@ -16,7 +16,7 @@ def convert_currency(currency1, currency2, amount_of_currency1):
     if currency1 == currency2:
         return amount_of_currency1
     try:
-        response = requests.get(f'https://localhost:8000/webapps2024/conversion/{currency1.upper()}/{currency2.upper()}/'
+        response = requests.get(f'https://ec2-52-203-137-55.compute-1.amazonaws.com/webapps2024/{currency1.upper()}/{currency2.upper()}/'
                                 f'{amount_of_currency1}')
     except Exception:
         raise CurrencyConversionError('Error in currency conversion, please try again')
