@@ -15,10 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
+from django.views.generic import RedirectView
 import payapp.views
 
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='webapps2024/', permanent=True)),
     path('webapps2024/', include([
         path('', payapp.views.home, name='home'),
         path('register/', include(('register.urls', 'register'), namespace='register')),
