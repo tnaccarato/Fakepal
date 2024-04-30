@@ -24,7 +24,7 @@ def convert_currency(currency1, currency2, amount_of_currency1):
     url = f'https://ec2-52-203-137-55.compute-1.amazonaws.com/webapps2024/conversion/{currency1.upper()}/{currency2.upper()}/{amount_of_currency1}/'
     # Make a request to the RESTful service
     try:
-        response = requests.get(url)
+        response = requests.get(url, verify=False)
 
     # If there is a connection error, raise an exception
     except requests.exceptions.ConnectionError:
