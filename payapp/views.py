@@ -383,7 +383,6 @@ def notifications(request):
     # Render the notifications page with the context
     return render(request, 'payapp/notifications.html', {'notifications': notifications_list})
 
-
 @login_required_message
 def mark_notification_as_read(request, notification_id):
     try:
